@@ -3,392 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXY | AIでビジネスを加速する</title>
-  <meta name="description" content="AIコンサルティング・飲食店支援・営業代行の3領域で、あなたのビジネスに次をもたらす。">
-  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>NEXY | AIでビジネスの次を創る</title>
+  <meta name="description" content="AIコンサルティングと飲食店支援で、あらゆるビジネスの次を創る。">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
-      --black: #0a0a0a;
-      --gray:  #6b6b6b;
-      --light: #f5f5f3;
+      --black: #111111;
       --white: #ffffff;
+      --gray:  #666666;
+      --lgray: #999999;
+      --border: #e8e8e8;
+      --light: #fafafa;
       --blue:  #1240c4;
-      --border: #e0e0e0;
-      --border-dark: #1a1a1a;
+      --blue-light: #e8efff;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Outfit', 'Noto Sans JP', sans-serif;
-      background: var(--white);
-      color: var(--black);
-      overflow-x: hidden;
-    }
+    body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 64px;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
+      display: grid; grid-template-columns: 200px 1fr 200px;
+      align-items: center; height: 64px; padding: 0 40px;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem; letter-spacing: 0.12em;
-      color: var(--black); text-decoration: none;
-    }
+    .nav-logo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--black); text-decoration: none; }
     .nav-logo span { color: var(--blue); }
-    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
-    .nav-links a {
-      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--gray);
-      text-decoration: none; transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--black); }
-    .nav-links .nav-num {
-      font-size: 0.6rem; color: var(--blue);
-      vertical-align: super; margin-left: 2px;
-    }
-    .nav-cta {
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--white);
-      background: var(--black); padding: 10px 24px;
-      text-decoration: none; transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--blue); }
+    .nav-links { display: flex; justify-content: center; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--black); text-decoration: none; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 0.45; }
+    .nav-right { display: flex; justify-content: flex-end; }
+    .nav-cta { font-size: 0.82rem; font-weight: 600; color: var(--white); background: var(--black); padding: 9px 20px; text-decoration: none; border-radius: 4px; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.7; }
 
     /* ── HERO ── */
     #home {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 48px 80px;
-      border-bottom: 1px solid var(--border);
+      min-height: 100vh; padding-top: 64px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      background: #fdf9f6;
     }
-    .hero-eyebrow {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--gray);
-      margin-bottom: 24px;
-      opacity: 0; animation: fadeIn 0.8s 0.2s forwards;
+    .hero-ring {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 560px; height: 560px; pointer-events: none; opacity: 0.3;
     }
+    .hero-ring svg { width: 100%; height: 100%; animation: spin 50s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hero-content { position: relative; z-index: 1; padding: 0 40px; max-width: 900px; }
     .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 13vw, 14rem);
-      line-height: 0.92; letter-spacing: -0.01em;
-      margin-bottom: 0;
-      opacity: 0; animation: fadeIn 0.8s 0.3s forwards;
+      font-size: clamp(3.2rem, 7vw, 7.5rem);
+      font-weight: 800; line-height: 1.07;
+      letter-spacing: -0.03em; color: var(--black); margin-bottom: 24px;
     }
-    .hero-title .line-jp {
-      display: block;
-      font-family: 'Shippori Mincho', serif;
-      font-size: 0.28em; font-weight: 600;
-      letter-spacing: 0.08em; color: var(--gray);
-      margin-bottom: 8px; line-height: 1.6;
-    }
-    .hero-title .line-blue { color: var(--blue); }
-
-    .hero-bottom {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-top: 64px; padding-top: 40px;
-      border-top: 1px solid var(--border);
-      opacity: 0; animation: fadeIn 0.8s 0.5s forwards;
-    }
-    .hero-desc {
-      font-size: 1rem; color: var(--gray); line-height: 1.8;
-      max-width: 400px;
-      font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
-    }
-    .hero-actions { display: flex; gap: 12px; }
-    .btn-primary {
-      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--white);
-      background: var(--black); padding: 14px 32px;
-      text-decoration: none; transition: background 0.2s;
-    }
-    .btn-primary:hover { background: var(--blue); }
-    .btn-line {
-      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--black);
-      padding: 14px 32px; text-decoration: none;
-      border: 1px solid var(--border-dark); transition: all 0.2s;
-    }
-    .btn-line:hover { background: var(--black); color: var(--white); }
-
-    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .hero-sub { font-size: 1rem; color: var(--gray); font-family: 'Noto Sans JP', sans-serif; }
 
     /* ── MARQUEE ── */
-    .marquee-wrap {
-      overflow: hidden; border-bottom: 1px solid var(--border);
-      padding: 20px 0; background: var(--light);
-    }
-    .marquee-track {
-      display: flex; width: max-content;
-      animation: marquee 20s linear infinite;
-    }
-    .marquee-item {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem; letter-spacing: 0.2em;
-      color: var(--gray); white-space: nowrap;
-      padding: 0 40px;
-    }
-    .marquee-item span { color: var(--blue); margin: 0 12px; }
+    .marquee-wrap { background: var(--black); overflow: hidden; padding: 13px 0; }
+    .marquee-track { display: flex; width: max-content; animation: marquee 20s linear infinite; }
+    .marquee-item { display: flex; align-items: center; gap: 18px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff; white-space: nowrap; padding: 0 24px; }
+    .m-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #444; display: inline-block; flex-shrink: 0; }
     @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-    /* ── BUSINESS ── */
-    #services {
-      border-bottom: 1px solid var(--border);
-    }
-    .section-header {
-      display: flex; align-items: baseline; justify-content: space-between;
-      padding: 64px 48px 48px;
-      border-bottom: 1px solid var(--border);
-    }
-    .section-label {
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--gray);
-    }
-    .section-title-main {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 5rem);
-      letter-spacing: 0.04em; line-height: 1;
-    }
-    .section-title-main em {
-      font-style: italic; color: var(--blue);
-      font-family: 'Shippori Mincho', serif;
-    }
-
-    .services-tabs {
-      display: flex; border-bottom: 1px solid var(--border);
-    }
-    .stab {
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; padding: 20px 40px;
-      background: none; border: none; border-right: 1px solid var(--border);
-      cursor: pointer; color: var(--gray); transition: all 0.2s;
-      position: relative;
-    }
-    .stab::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-      background: var(--black); transform: scaleX(0); transition: transform 0.2s;
-    }
-    .stab.active, .stab:hover { color: var(--black); }
-    .stab.active::after { transform: scaleX(1); }
-
-    .service-panels > div { display: none; }
-    .service-panels > div.active { display: block; }
-
-    .panel-grid {
-      display: grid;
-    }
-    .panel-grid-2 { grid-template-columns: 1fr 1fr; }
-    .panel-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-
-    .scard {
-      padding: 56px 48px;
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      transition: background 0.25s;
-    }
-    .scard:nth-child(2n) { border-right: none; }
-    .panel-grid-3 .scard:nth-child(2n) { border-right: 1px solid var(--border); }
-    .panel-grid-3 .scard:nth-child(3n) { border-right: none; }
-    .scard:hover { background: var(--light); }
-    .scard-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.5rem; color: #e8e8e8; line-height: 1;
-      margin-bottom: 24px;
-    }
-    .scard h3 {
-      font-size: 1.1rem; font-weight: 600;
-      margin-bottom: 16px; letter-spacing: 0.02em;
-    }
-    .scard p {
-      font-size: 0.88rem; color: var(--gray); line-height: 1.85;
-      font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
-    }
-    .scard-tag {
-      display: inline-block; margin-top: 24px;
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--blue);
-      border-bottom: 1px solid var(--blue); padding-bottom: 2px;
-    }
-
-    /* ── WHY ── */
-    #why { border-bottom: 1px solid var(--border); }
-    .why-grid {
+    /* ── BUSINESS SECTIONS ── */
+    #business { border-top: 1px solid var(--border); }
+    .biz-section {
       display: grid; grid-template-columns: 1fr 1fr;
-    }
-    .why-item {
-      padding: 64px 48px;
-      border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      transition: background 0.25s;
     }
-    .why-item:nth-child(even) { border-right: none; }
-    .why-item:nth-child(n+3) { border-bottom: none; }
-    .why-item:hover { background: var(--light); }
-    .why-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 4rem; color: #ebebeb; line-height: 1;
-      margin-bottom: 20px;
-    }
-    .why-item h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 14px; }
-    .why-item p { font-size: 0.88rem; color: var(--gray); line-height: 1.85; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; }
+    .biz-section.reverse { direction: rtl; }
+    .biz-section.reverse > * { direction: ltr; }
 
-    /* ── FLOW ── */
-    #flow { border-bottom: 1px solid var(--border); }
-    .flow-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-    }
-    .flow-item {
-      padding: 56px 40px;
+    .biz-text {
+      padding: 80px 64px;
+      display: flex; flex-direction: column; justify-content: center;
       border-right: 1px solid var(--border);
-      transition: background 0.25s;
     }
-    .flow-item:last-child { border-right: none; }
-    .flow-item:hover { background: var(--light); }
-    .flow-step-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem; color: #efefef; line-height: 1;
-      margin-bottom: 20px;
-    }
-    .flow-icon { font-size: 1.8rem; margin-bottom: 16px; }
-    .flow-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
-    .flow-item p { font-size: 0.85rem; color: var(--gray); line-height: 1.8; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; }
+    .biz-section.reverse .biz-text { border-right: none; border-left: 1px solid var(--border); }
 
-    /* ── CTA BANNER ── */
-    .cta-banner {
-      background: var(--black); color: var(--white);
-      padding: 100px 48px;
+    .biz-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--lgray); margin-bottom: 18px; }
+    .biz-title { font-size: clamp(1.8rem, 2.8vw, 2.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.025em; margin-bottom: 18px; }
+    .biz-desc { font-size: 0.92rem; color: var(--gray); line-height: 1.85; font-family: 'Noto Sans JP', sans-serif; margin-bottom: 32px; max-width: 420px; }
+    .biz-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--black); text-decoration: none; border: 1px solid var(--black); padding: 11px 22px; border-radius: 4px; width: fit-content; transition: all 0.2s; }
+    .biz-link:hover { background: var(--black); color: var(--white); }
+
+    .biz-visual { background: #f5f7fc; display: flex; align-items: center; justify-content: center; padding: 48px 40px; min-height: 520px; }
+
+    /* ── AI DASHBOARD ── */
+    .ai-dashboard {
+      width: 100%; max-width: 440px;
+      background: var(--white); border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .dash-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
+    }
+    .dash-title { font-size: 0.82rem; font-weight: 700; }
+    .dash-badge { font-size: 0.65rem; font-weight: 600; background: #e8f0ff; color: var(--blue); padding: 3px 10px; border-radius: 100px; }
+    .dash-kpi-row {
+      display: grid; grid-template-columns: repeat(3,1fr);
       border-bottom: 1px solid var(--border);
     }
-    .cta-banner h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 6vw, 6rem);
-      letter-spacing: 0.04em; line-height: 1;
+    .dash-kpi { padding: 16px 18px; border-right: 1px solid var(--border); }
+    .dash-kpi:last-child { border-right: none; }
+    .dash-kpi-label { font-size: 0.62rem; color: var(--lgray); margin-bottom: 5px; letter-spacing: 0.04em; }
+    .dash-kpi-val { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; }
+    .dash-kpi-val.up { color: #0a7a3a; }
+    .dash-kpi-val.blue { color: var(--blue); }
+    .dash-kpi-delta { font-size: 0.65rem; font-weight: 600; color: #0a7a3a; background: #e6f7ee; padding: 2px 6px; border-radius: 100px; margin-top: 4px; display: inline-block; }
+    .dash-chart-wrap { padding: 20px 20px 16px; }
+    .dash-chart-label { font-size: 0.7rem; font-weight: 600; color: var(--lgray); margin-bottom: 12px; letter-spacing: 0.06em; }
+    .dash-chart-canvas { width: 100% !important; height: 140px !important; }
+    .dash-items { padding: 0 20px 18px; display: flex; flex-direction: column; gap: 10px; }
+    .dash-item { display: flex; align-items: center; gap: 10px; }
+    .dash-item-icon { width: 28px; height: 28px; border-radius: 7px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .dash-item-info { flex: 1; }
+    .dash-item-name { font-size: 0.72rem; font-weight: 600; margin-bottom: 4px; }
+    .dash-item-bar-bg { height: 5px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+    .dash-item-bar { height: 100%; border-radius: 3px; background: var(--blue); transition: width 1.5s ease; }
+    .dash-item-pct { font-size: 0.68rem; font-weight: 700; color: var(--blue); white-space: nowrap; }
+
+    /* ── FOOD DASHBOARD ── */
+    .food-dashboard {
+      width: 100%; max-width: 440px;
+      background: var(--white); border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+      overflow: hidden;
     }
-    .cta-banner h2 em {
-      font-style: italic; color: var(--blue);
-      font-family: 'Shippori Mincho', serif;
+    .food-dash-header {
+      padding: 16px 22px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fffbf7;
     }
-    .cta-banner p { font-size: 0.95rem; color: #aaa; line-height: 1.8; max-width: 360px; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; margin-top: 16px; }
-    .cta-right { text-align: right; }
-    .cta-right a {
-      display: inline-block;
-      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--black);
-      background: var(--white); padding: 18px 48px;
-      text-decoration: none; transition: all 0.2s;
-    }
-    .cta-right a:hover { background: var(--blue); color: var(--white); }
+    .food-dash-title { font-size: 0.82rem; font-weight: 700; }
+    .food-dash-period { font-size: 0.65rem; color: var(--lgray); }
+    .food-kpi-row { display: grid; grid-template-columns: repeat(3,1fr); border-bottom: 1px solid var(--border); }
+    .food-kpi { padding: 14px 16px; border-right: 1px solid var(--border); text-align: center; }
+    .food-kpi:last-child { border-right: none; }
+    .food-kpi-val { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; color: var(--black); }
+    .food-kpi-val .accent { color: #d4440a; }
+    .food-kpi-label { font-size: 0.62rem; color: var(--lgray); margin-top: 3px; }
+    .food-chart-wrap { padding: 18px 20px 12px; }
+    .food-chart-label { font-size: 0.7rem; font-weight: 600; color: var(--lgray); margin-bottom: 10px; letter-spacing: 0.06em; }
+    .food-chart-canvas { width: 100% !important; height: 130px !important; }
+    .food-tags { padding: 14px 20px 18px; display: flex; gap: 7px; flex-wrap: wrap; }
+    .food-tag { font-size: 0.67rem; font-weight: 600; padding: 5px 12px; border-radius: 100px; }
+    .tag-orange { background: #fff0e4; color: #c94000; }
+    .tag-blue   { background: #e8efff; color: var(--blue); }
+    .tag-green  { background: #e6f7ee; color: #0a7a3a; }
+    .tag-purple { background: #f0e8ff; color: #6b21a8; }
+
+    /* ── NEWS ── */
+    #news { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .news-header { display: grid; grid-template-columns: 180px 1fr; padding: 52px 40px 36px; border-bottom: 1px solid var(--border); }
+    .news-label { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .news-sub { font-size: 0.82rem; color: var(--lgray); padding-top: 6px; }
+    .news-item { display: grid; grid-template-columns: 130px 110px 1fr; align-items: center; gap: 20px; padding: 22px 40px; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--black); transition: background 0.15s; }
+    .news-item:hover { background: var(--light); }
+    .news-item:last-child { border-bottom: none; }
+    .news-date { font-size: 0.8rem; color: var(--lgray); }
+    .news-tag { font-size: 0.68rem; font-weight: 600; padding: 4px 11px; border: 1px solid var(--border); border-radius: 100px; color: var(--gray); width: fit-content; }
+    .news-title { font-size: 0.9rem; font-weight: 500; line-height: 1.6; }
+
+    /* ── CTA BAND ── */
+    .cta-band { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 64px 40px; background: var(--light); border-bottom: 1px solid var(--border); gap: 40px; }
+    .cta-band h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 10px; }
+    .cta-band p { font-size: 0.88rem; color: var(--gray); font-family: 'Noto Sans JP', sans-serif; }
+    .btn-black { font-size: 0.85rem; font-weight: 600; color: var(--white); background: var(--black); padding: 14px 32px; text-decoration: none; border-radius: 4px; white-space: nowrap; transition: opacity 0.2s; }
+    .btn-black:hover { opacity: 0.7; }
 
     /* ── CONTACT ── */
-    #contact { border-bottom: 1px solid var(--border); }
-    .contact-grid {
-      display: grid; grid-template-columns: 1fr 1.6fr;
-      border-top: 1px solid var(--border);
-    }
-    .contact-left {
-      padding: 72px 48px;
-      border-right: 1px solid var(--border);
-    }
-    .contact-left h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.5rem; letter-spacing: 0.04em; line-height: 1;
-      margin-bottom: 24px;
-    }
-    .contact-left p { font-size: 0.9rem; color: var(--gray); line-height: 1.85; font-family: 'Noto Sans JP', sans-serif; font-weight: 300; margin-bottom: 40px; }
-    .contact-info { display: flex; flex-direction: column; gap: 16px; }
-    .cinfo {
-      display: flex; align-items: flex-start; gap: 16px;
-      padding: 16px 0; border-top: 1px solid var(--border);
-    }
-    .cinfo-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); min-width: 80px; padding-top: 2px; }
-    .cinfo-val { font-size: 0.88rem; color: var(--black); }
-
-    .contact-form-wrap { padding: 72px 48px; }
-    .contact-form { display: flex; flex-direction: column; gap: 0; }
-    .cf-group {
-      display: flex; flex-direction: column;
-      border-bottom: 1px solid var(--border);
-      padding: 20px 0;
-    }
-    .cf-group label {
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--gray); margin-bottom: 8px;
-    }
-    .cf-group input, .cf-group textarea, .cf-group select {
-      font-family: 'Outfit', sans-serif; font-size: 0.95rem;
-      border: none; outline: none; background: none;
-      color: var(--black); width: 100%; padding: 4px 0;
-    }
-    .cf-group input::placeholder, .cf-group textarea::placeholder { color: #ccc; }
-    .cf-group textarea { resize: none; min-height: 100px; }
-    .cf-group select { cursor: pointer; appearance: none; }
-    .cf-group select option { background: var(--white); }
-    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
-    .cf-submit-row { margin-top: 40px; }
-    .cf-submit {
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--white);
-      background: var(--black); border: none;
-      padding: 18px 48px; cursor: pointer; transition: background 0.2s;
-    }
-    .cf-submit:hover { background: var(--blue); }
+    #contact { border-top: 1px solid var(--border); }
+    .contact-inner { max-width: 600px; margin: 0 auto; padding: 96px 40px; text-align: center; }
+    .contact-inner h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 18px; }
+    .contact-inner > p { font-size: 0.95rem; color: var(--gray); line-height: 1.8; font-family: 'Noto Sans JP', sans-serif; margin-bottom: 48px; }
+    .cf { display: flex; flex-direction: column; text-align: left; }
+    .cf-g { display: flex; flex-direction: column; padding: 15px 0; border-bottom: 1px solid var(--border); }
+    .cf-g label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lgray); margin-bottom: 8px; }
+    .cf-g input, .cf-g textarea, .cf-g select { font-family: 'Inter', sans-serif; font-size: 0.95rem; border: none; outline: none; background: none; color: var(--black); width: 100%; }
+    .cf-g input::placeholder, .cf-g textarea::placeholder { color: #d0d0d0; }
+    .cf-g textarea { resize: none; min-height: 80px; }
+    .cf-g select { cursor: pointer; appearance: none; }
+    .cf-submit { margin-top: 32px; font-size: 0.88rem; font-weight: 600; color: var(--white); background: var(--black); border: none; padding: 16px; cursor: pointer; border-radius: 4px; width: 100%; transition: opacity 0.2s; }
+    .cf-submit:hover { opacity: 0.7; }
 
     /* ── FOOTER ── */
-    footer {
-      padding: 48px;
-      display: flex; align-items: flex-start; justify-content: space-between;
-    }
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem; letter-spacing: 0.12em;
-      color: var(--black); text-decoration: none;
-    }
+    footer { padding: 52px 40px 28px; display: grid; grid-template-columns: 220px 1fr 300px; gap: 40px; border-bottom: 1px solid var(--border); }
+    .footer-logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--black); text-decoration: none; display: block; margin-bottom: 18px; }
     .footer-logo span { color: var(--blue); }
-    .footer-tagline { font-size: 0.78rem; color: var(--gray); margin-top: 8px; line-height: 1.6; }
-    .footer-nav { display: flex; gap: 64px; }
-    .footer-col h4 {
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--gray); margin-bottom: 16px;
-    }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col a { font-size: 0.85rem; color: var(--gray); text-decoration: none; transition: color 0.2s; }
-    .footer-col a:hover { color: var(--black); }
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding: 20px 48px;
-      display: flex; justify-content: space-between;
-      font-size: 0.75rem; color: var(--gray);
-    }
+    .footer-sns { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--lgray); text-decoration: none; transition: color 0.2s; }
+    .footer-sns:hover { color: var(--black); }
+    .footer-nav-wrap { display: flex; gap: 52px; }
+    .fcol h4 { font-size: 0.78rem; font-weight: 600; margin-bottom: 14px; }
+    .fcol ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .fcol a { font-size: 0.8rem; color: var(--lgray); text-decoration: none; transition: color 0.2s; }
+    .fcol a:hover { color: var(--black); }
+    .footer-right h4 { font-size: 0.78rem; font-weight: 600; margin-bottom: 14px; }
+    .footer-links-col { display: flex; flex-direction: column; gap: 8px; }
+    .footer-ext { display: block; padding: 14px 16px; border: 1px solid var(--border); border-radius: 6px; text-decoration: none; transition: border-color 0.2s; }
+    .footer-ext:hover { border-color: var(--black); }
+    .footer-ext-t { font-size: 0.82rem; font-weight: 600; color: var(--black); margin-bottom: 2px; }
+    .footer-ext-d { font-size: 0.7rem; color: var(--lgray); }
+    .footer-bottom { padding: 18px 40px; display: flex; justify-content: space-between; }
+    .footer-bottom p { font-size: 0.73rem; color: var(--lgray); }
+    .footer-btm-links { display: flex; gap: 20px; }
+    .footer-btm-links a { font-size: 0.73rem; color: var(--lgray); text-decoration: none; transition: color 0.2s; }
+    .footer-btm-links a:hover { color: var(--black); }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      nav { padding: 0 24px; }
+    @media (max-width: 900px) {
+      nav { grid-template-columns: 1fr auto; padding: 0 20px; }
       .nav-links { display: none; }
-      #home { padding: 0 24px 60px; }
-      .section-header { padding: 48px 24px 32px; flex-direction: column; gap: 12px; }
-      .stab { padding: 16px 24px; font-size: 0.72rem; }
-      .panel-grid-2, .panel-grid-3 { grid-template-columns: 1fr; }
-      .scard { border-right: none !important; padding: 40px 24px; }
-      .why-grid { grid-template-columns: 1fr; }
-      .why-item { border-right: none !important; padding: 40px 24px; }
-      .flow-grid { grid-template-columns: 1fr 1fr; }
-      .flow-item { padding: 40px 24px; }
-      .cta-banner { flex-direction: column; gap: 40px; padding: 64px 24px; }
-      .cta-right { text-align: left; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .contact-left { border-right: none; padding: 48px 24px; }
-      .contact-form-wrap { padding: 0 24px 48px; }
-      .cf-row { grid-template-columns: 1fr; }
-      footer { flex-direction: column; gap: 40px; padding: 40px 24px; }
-      .footer-nav { gap: 32px; flex-wrap: wrap; }
-      .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; }
+      .biz-section { grid-template-columns: 1fr; direction: ltr !important; }
+      .biz-text { padding: 48px 20px; border-right: none !important; border-left: none !important; }
+      .biz-visual { padding: 36px 20px; min-height: auto; }
+      .news-header { grid-template-columns: 1fr; padding: 36px 20px; }
+      .news-item { grid-template-columns: 1fr; padding: 18px 20px; gap: 6px; }
+      .cta-band { grid-template-columns: 1fr; padding: 48px 20px; }
+      footer { grid-template-columns: 1fr; padding: 40px 20px; }
+      .footer-nav-wrap { gap: 28px; flex-wrap: wrap; }
+      .footer-bottom { padding: 14px 20px; flex-direction: column; gap: 8px; }
+      .contact-inner { padding: 64px 20px; }
     }
   </style>
 </head>
@@ -396,275 +237,325 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#home" class="nav-logo">NEX<span>Y</span></a>
+    <a href="#home" class="nav-logo">NEXY<span>.</span></a>
     <ul class="nav-links">
-      <li><a href="#services">Business</a></li>
-      <li><a href="#why">Why NEXY</a></li>
-      <li><a href="#flow">Flow</a></li>
+      <li><a href="#business">Business</a></li>
+      <li><a href="#news">News</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#contact" class="nav-cta">無料相談</a>
+    <div class="nav-right"><a href="#contact" class="nav-cta">無料相談</a></div>
   </nav>
 
   <!-- HERO -->
   <section id="home">
-    <div class="hero-eyebrow">AI × Consulting × Sales — Tokyo, Japan</div>
-    <h1 class="hero-title">
-      <span class="line-jp">決断を加速し、ビジネスを前進させる。</span>
-      ACCELERATE<br>
-      YOUR <span class="line-blue">NEXT.</span>
-    </h1>
-    <div class="hero-bottom">
-      <p class="hero-desc">
-        AIコンサルティング・飲食店特化支援・営業代行の3領域で、<br>
-        スタートアップから飲食店まで、あらゆるビジネスの「次」をつくる。
-      </p>
-      <div class="hero-actions">
-        <a href="#services" class="btn-primary">Our Business</a>
-        <a href="#contact" class="btn-line">無料相談する</a>
-      </div>
+    <div class="hero-ring">
+      <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="185" stroke="#888" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="165" stroke="#999" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="145" stroke="#aaa" stroke-width="0.6"/>
+        <circle cx="200" cy="200" r="125" stroke="#aaa" stroke-width="0.7"/>
+        <circle cx="200" cy="200" r="105" stroke="#bbb" stroke-width="0.8"/>
+        <circle cx="200" cy="200" r="85" stroke="#bbb" stroke-width="0.9"/>
+        <circle cx="200" cy="200" r="65" stroke="#ccc" stroke-width="1"/>
+        <circle cx="200" cy="200" r="45" stroke="#ccc" stroke-width="1.1"/>
+        <circle cx="200" cy="200" r="25" stroke="#ddd" stroke-width="1.2"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(20 200 200)"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(50 200 200)"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(80 200 200)"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(110 200 200)"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(140 200 200)"/>
+        <ellipse cx="200" cy="200" rx="185" ry="55" stroke="#999" stroke-width="0.4" transform="rotate(170 200 200)"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">Accelerate your<br>business with AI</h1>
+      <p class="hero-sub">AIの力で、ビジネスの次を創る</p>
     </div>
   </section>
 
   <!-- MARQUEE -->
   <div class="marquee-wrap">
     <div class="marquee-track">
-      <span class="marquee-item">AI CONSULTING <span>×</span> FOOD CONSULTING <span>×</span> SALES AGENCY <span>×</span> BUSINESS ACCELERATION <span>×</span> NEXY <span>×</span></span>
-      <span class="marquee-item">AI CONSULTING <span>×</span> FOOD CONSULTING <span>×</span> SALES AGENCY <span>×</span> BUSINESS ACCELERATION <span>×</span> NEXY <span>×</span></span>
+      <div class="marquee-item">ACCELERATE YOUR BUSINESS WITH AI <span class="m-dot"></span></div>
+      <div class="marquee-item">AI CONSULTING <span class="m-dot"></span></div>
+      <div class="marquee-item">FOOD & RESTAURANT CONSULTING <span class="m-dot"></span></div>
+      <div class="marquee-item">NEXY <span class="m-dot"></span></div>
+      <div class="marquee-item">ACCELERATE YOUR BUSINESS WITH AI <span class="m-dot"></span></div>
+      <div class="marquee-item">AI CONSULTING <span class="m-dot"></span></div>
+      <div class="marquee-item">FOOD & RESTAURANT CONSULTING <span class="m-dot"></span></div>
+      <div class="marquee-item">NEXY <span class="m-dot"></span></div>
     </div>
   </div>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="section-header">
-      <span class="section-label">Our Business</span>
-      <h2 class="section-title-main">3 AREAS OF <em>専門性</em></h2>
-    </div>
-    <div class="services-tabs">
-      <button class="stab active" onclick="switchTab('ai',this)">AI Consulting</button>
-      <button class="stab" onclick="switchTab('food',this)">Food Consulting</button>
-      <button class="stab" onclick="switchTab('sales',this)">Sales Agency</button>
-    </div>
-    <div class="service-panels">
-      <!-- AI -->
-      <div id="panel-ai" class="active">
-        <div class="panel-grid panel-grid-2">
-          <div class="scard">
-            <div class="scard-num">01</div>
-            <h3>AI戦略コンサルティング</h3>
-            <p>ビジネスモデルを分析し、AIを活用した意思決定フローを設計。経営判断のスピードと精度を同時に引き上げます。</p>
-            <span class="scard-tag">Strategy</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">02</div>
-            <h3>業務自動化・DX推進</h3>
-            <p>反復的な業務プロセスをAIで自動化。人材リソースを高付加価値業務にシフトし、組織の生産性を最大化します。</p>
-            <span class="scard-tag">Automation</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">03</div>
-            <h3>データ分析・意思決定支援</h3>
-            <p>蓄積データをAIが解析し、経営判断に必要なインサイトをリアルタイムで提供。データドリブンな経営を実現します。</p>
-            <span class="scard-tag">Analytics</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">04</div>
-            <h3>AIプロダクト開発支援</h3>
-            <p>AI機能を組み込んだプロダクト開発をフルサポート。MVP設計から実装・運用まで一貫して伴走します。</p>
-            <span class="scard-tag">Development</span>
-          </div>
-        </div>
+  <!-- BUSINESS -->
+  <section id="business">
+
+    <!-- AI CONSULTING -->
+    <div class="biz-section">
+      <div class="biz-text">
+        <p class="biz-label">Business 01</p>
+        <h2 class="biz-title">AIコンサルティング</h2>
+        <p class="biz-desc">スタートアップの意思決定にAIを実装し、ビジネスの成長スピードを根本から変える。戦略設計から業務自動化、プロダクト開発まで一貫して伴走します。</p>
+        <a href="#contact" class="biz-link">詳しく見る →</a>
       </div>
-      <!-- FOOD -->
-      <div id="panel-food">
-        <div class="panel-grid panel-grid-3">
-          <div class="scard">
-            <div class="scard-num">01</div>
-            <h3>売上改善コンサルティング</h3>
-            <p>客単価・回転率・リピート率を多角的に分析。AIによるデータ解析で売上最大化の打ち手を特定します。</p>
-            <span class="scard-tag">Revenue</span>
+      <div class="biz-visual">
+        <div class="ai-dashboard">
+          <div class="dash-header">
+            <span class="dash-title">📊 AI導入効果ダッシュボード</span>
+            <span class="dash-badge">LIVE</span>
           </div>
-          <div class="scard">
-            <div class="scard-num">02</div>
-            <h3>メニュー開発・価格戦略</h3>
-            <p>競合分析・原価計算・顧客ニーズを統合し、利益率の高いメニュー構成と最適な価格設定を設計します。</p>
-            <span class="scard-tag">Menu</span>
+          <div class="dash-kpi-row">
+            <div class="dash-kpi">
+              <div class="dash-kpi-label">意思決定速度</div>
+              <div class="dash-kpi-val blue">3.2×</div>
+              <div class="dash-kpi-delta">↑ 220%</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="dash-kpi-label">業務自動化率</div>
+              <div class="dash-kpi-val up">68%</div>
+              <div class="dash-kpi-delta">↑ 44pt</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="dash-kpi-label">コスト削減</div>
+              <div class="dash-kpi-val up">¥2.4M</div>
+              <div class="dash-kpi-delta">↑ 月次</div>
+            </div>
           </div>
-          <div class="scard">
-            <div class="scard-num">03</div>
-            <h3>SNS・デジタルマーケティング</h3>
-            <p>Instagram・TikTok・Googleマップを活用した集客戦略。AIによるコンテンツ最適化で認知度を高めます。</p>
-            <span class="scard-tag">Digital</span>
+          <div class="dash-chart-wrap">
+            <div class="dash-chart-label">GROWTH INDEX — 過去6ヶ月</div>
+            <canvas id="aiChart" class="dash-chart-canvas"></canvas>
           </div>
-          <div class="scard">
-            <div class="scard-num">04</div>
-            <h3>業務オペレーション改善</h3>
-            <p>仕込み・接客・発注などの業務フローを可視化し、AIツールを活用したオペレーション効率化を実現します。</p>
-            <span class="scard-tag">Operations</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">05</div>
-            <h3>口コミ・レビュー対策</h3>
-            <p>Googleレビュー・食べログ等の評価改善戦略を立案。顧客満足度向上と口コミ増加を仕組みで実現します。</p>
-            <span class="scard-tag">Reputation</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">06</div>
-            <h3>新規出店・FC展開支援</h3>
-            <p>立地分析から事業計画策定まで、新規出店をAIデータで科学的にサポート。FC展開の戦略設計も対応します。</p>
-            <span class="scard-tag">Expansion</span>
-          </div>
-        </div>
-      </div>
-      <!-- SALES -->
-      <div id="panel-sales">
-        <div class="panel-grid panel-grid-2">
-          <div class="scard">
-            <div class="scard-num">01</div>
-            <h3>新規顧客開拓・アポ獲得</h3>
-            <p>AIによるターゲットリスト作成から架電・メールアプローチまで一括代行。質の高いアポイントを安定的に創出します。</p>
-            <span class="scard-tag">Lead Gen</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">02</div>
-            <h3>提案書・営業資料作成</h3>
-            <p>AIを活用した高品質な提案書・会社案内・営業資料を迅速に作成。受注率向上につながるドキュメントを提供します。</p>
-            <span class="scard-tag">Content</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">03</div>
-            <h3>既存顧客フォロー・CRM構築</h3>
-            <p>AIを活用した顧客管理システムの構築と、継続的なフォローアップで解約防止・アップセルを実現します。</p>
-            <span class="scard-tag">Retention</span>
-          </div>
-          <div class="scard">
-            <div class="scard-num">04</div>
-            <h3>MAツール導入・メール自動化</h3>
-            <p>マーケティングオートメーションの設計・運用を代行。見込み顧客の育成から商談化まで仕組みで自動化します。</p>
-            <span class="scard-tag">Automation</span>
+          <div class="dash-items">
+            <div class="dash-item">
+              <div class="dash-item-icon">🧠</div>
+              <div class="dash-item-info">
+                <div class="dash-item-name">AI戦略実装スコア</div>
+                <div class="dash-item-bar-bg"><div class="dash-item-bar" style="width:0%" data-width="87%"></div></div>
+              </div>
+              <span class="dash-item-pct">87%</span>
+            </div>
+            <div class="dash-item">
+              <div class="dash-item-icon">⚡</div>
+              <div class="dash-item-info">
+                <div class="dash-item-name">プロセス自動化率</div>
+                <div class="dash-item-bar-bg"><div class="dash-item-bar" style="width:0%" data-width="68%"></div></div>
+              </div>
+              <span class="dash-item-pct">68%</span>
+            </div>
+            <div class="dash-item">
+              <div class="dash-item-icon">🚀</div>
+              <div class="dash-item-info">
+                <div class="dash-item-name">顧客満足度</div>
+                <div class="dash-item-bar-bg"><div class="dash-item-bar" style="width:0%" data-width="94%"></div></div>
+              </div>
+              <span class="dash-item-pct">94%</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- FOOD CONSULTING -->
+    <div class="biz-section reverse">
+      <div class="biz-text">
+        <p class="biz-label">Business 02</p>
+        <h2 class="biz-title">飲食店<br>コンサルティング</h2>
+        <p class="biz-desc">売上改善からSNSマーケティング、メニュー開発、業務効率化まで。AIデータ分析を活用し、飲食店の収益を最大化する総合支援サービスです。</p>
+        <a href="#contact" class="biz-link">詳しく見る →</a>
+      </div>
+      <div class="biz-visual" style="background:#fdf7f2;">
+        <div class="food-dashboard">
+          <div class="food-dash-header">
+            <span class="food-dash-title">🍽️ 月次経営レポート</span>
+            <span class="food-dash-period">2026年3月 / AI分析</span>
+          </div>
+          <div class="food-kpi-row">
+            <div class="food-kpi">
+              <div class="food-kpi-val">+<span class="accent">23</span>%</div>
+              <div class="food-kpi-label">売上成長率</div>
+            </div>
+            <div class="food-kpi">
+              <div class="food-kpi-val"><span class="accent">4.8</span></div>
+              <div class="food-kpi-label">Googleレビュー</div>
+            </div>
+            <div class="food-kpi">
+              <div class="food-kpi-val">+<span class="accent">41</span>%</div>
+              <div class="food-kpi-label">リピート率</div>
+            </div>
+          </div>
+          <div class="food-chart-wrap">
+            <div class="food-chart-label">月次売上推移（万円）</div>
+            <canvas id="foodChart" class="food-chart-canvas"></canvas>
+          </div>
+          <div class="food-tags">
+            <span class="food-tag tag-orange">メニュー改善</span>
+            <span class="food-tag tag-blue">SNS集客 +180%</span>
+            <span class="food-tag tag-green">原価率 -8pt</span>
+            <span class="food-tag tag-purple">口コミ対策</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
-  <!-- WHY -->
-  <section id="why">
-    <div class="section-header">
-      <span class="section-label">Why NEXY</span>
-      <h2 class="section-title-main">選ばれる <em>4つの理由</em></h2>
+  <!-- NEWS -->
+  <section id="news">
+    <div class="news-header">
+      <div class="news-label">News</div>
+      <div class="news-sub">ニュース・お知らせ</div>
     </div>
-    <div class="why-grid">
-      <div class="why-item"><div class="why-num">01</div><h3>AI×業界知識の掛け合わせ</h3><p>単なるAIツール導入ではなく、飲食・営業・経営の実務知識とAIを組み合わせることで、現場で使える実践的なソリューションを提供します。</p></div>
-      <div class="why-item"><div class="why-num">02</div><h3>スピード重視の意思決定支援</h3><p>スタートアップの現場感を理解した上で、時間軸を意識した提案を行います。分析から実行まで、とにかく速く動くことを重視します。</p></div>
-      <div class="why-item"><div class="why-num">03</div><h3>成果にコミットする伴走型支援</h3><p>提案して終わりではなく、実行フェーズまで一緒に走ります。KPIを共有し、数字で成果を出すことを最優先に動きます。</p></div>
-      <div class="why-item"><div class="why-num">04</div><h3>3領域のワンストップ対応</h3><p>AI・飲食・営業の3つの専門性を1社で提供。複数社に依頼する手間なく、一貫したビジョンのもとで事業全体をサポートします。</p></div>
-    </div>
+    <a href="#" class="news-item"><span class="news-date">2026.03.10</span><span class="news-tag">お知らせ</span><span class="news-title">NEXYのホームページを公開しました</span></a>
+    <a href="#" class="news-item"><span class="news-date">2026.03.01</span><span class="news-tag">プレスリリース</span><span class="news-title">AIコンサルティングサービスの提供を開始しました</span></a>
+    <a href="#" class="news-item"><span class="news-date">2026.02.15</span><span class="news-tag">お知らせ</span><span class="news-title">飲食店向けコンサルティングサービスの提供を開始しました</span></a>
   </section>
 
-  <!-- FLOW -->
-  <section id="flow">
-    <div class="section-header">
-      <span class="section-label">How it works</span>
-      <h2 class="section-title-main">4 STEPS TO <em>スタート</em></h2>
-    </div>
-    <div class="flow-grid">
-      <div class="flow-item"><div class="flow-step-num">01</div><div class="flow-icon">💬</div><h3>無料相談</h3><p>現状の課題や目標をヒアリング。30分のオンライン相談で方向性を整理します。</p></div>
-      <div class="flow-item"><div class="flow-step-num">02</div><div class="flow-icon">📋</div><h3>診断・提案</h3><p>課題を分析し、最適なサービスと具体的な施策プランをご提案します。</p></div>
-      <div class="flow-item"><div class="flow-step-num">03</div><div class="flow-icon">🚀</div><h3>実行・伴走</h3><p>合意後すぐに着手。週次レポートで進捗を共有しながら伴走します。</p></div>
-      <div class="flow-item"><div class="flow-step-num">04</div><div class="flow-icon">📈</div><h3>成果確認・改善</h3><p>KPIを定点観測し、データをもとに継続的に施策をアップデートします。</p></div>
-    </div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <div class="cta-banner">
+  <!-- CTA -->
+  <div class="cta-band">
     <div>
-      <h2>MAKE YOUR<br>BUSINESS <em>NEXT.</em></h2>
-      <p>まずは30分の無料相談から。AI・飲食・営業、どの領域でもお気軽にどうぞ。</p>
+      <h2>まず、話しましょう。</h2>
+      <p>AI・飲食のどちらでも、最初の相談は無料です。お気軽にお問い合わせください。</p>
     </div>
-    <div class="cta-right">
-      <a href="#contact">無料相談を申し込む →</a>
-    </div>
+    <a href="#contact" class="btn-black">無料相談を申し込む →</a>
   </div>
 
   <!-- CONTACT -->
   <section id="contact">
-    <div class="section-header">
-      <span class="section-label">Contact</span>
-      <h2 class="section-title-main">GET IN <em>TOUCH</em></h2>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-left">
-        <h2>まず、<br>話しましょう。</h2>
-        <p>AI導入・飲食コンサル・営業代行、どのサービスでも最初の相談は無料です。お気軽にご連絡ください。</p>
-        <div class="contact-info">
-          <div class="cinfo"><span class="cinfo-label">Email</span><span class="cinfo-val">info@nexy.work</span></div>
-          <div class="cinfo"><span class="cinfo-label">Response</span><span class="cinfo-val">通常24時間以内にご返信</span></div>
-          <div class="cinfo"><span class="cinfo-label">Area</span><span class="cinfo-val">全国対応（オンライン相談可）</span></div>
+    <div class="contact-inner">
+      <h2>Contact</h2>
+      <p>ご質問・ご相談はこちらから。<br>通常24時間以内にご返信いたします。</p>
+      <form class="cf" onsubmit="return false;">
+        <div class="cf-g"><label>お名前 *</label><input type="text" placeholder="山田 太郎"></div>
+        <div class="cf-g"><label>会社名・店舗名</label><input type="text" placeholder="株式会社〇〇 / 〇〇食堂"></div>
+        <div class="cf-g"><label>メールアドレス *</label><input type="email" placeholder="info@example.com"></div>
+        <div class="cf-g">
+          <label>ご興味のあるサービス</label>
+          <select><option value="">選択してください</option><option>AIコンサルティング</option><option>飲食店コンサルティング</option><option>両方・その他</option></select>
         </div>
-      </div>
-      <div class="contact-form-wrap">
-        <form class="contact-form" onsubmit="return false;">
-          <div class="cf-row">
-            <div class="cf-group"><label>お名前 *</label><input type="text" placeholder="山田 太郎"></div>
-            <div class="cf-group"><label>会社名・店舗名</label><input type="text" placeholder="株式会社〇〇"></div>
-          </div>
-          <div class="cf-group"><label>メールアドレス *</label><input type="email" placeholder="info@example.com"></div>
-          <div class="cf-group">
-            <label>ご興味のあるサービス</label>
-            <select>
-              <option value="">選択してください</option>
-              <option>AIコンサルティング</option>
-              <option>飲食店コンサルティング</option>
-              <option>営業代行</option>
-              <option>複数サービスの組み合わせ</option>
-              <option>その他・まずは相談したい</option>
-            </select>
-          </div>
-          <div class="cf-group"><label>現在の課題・ご相談内容</label><textarea placeholder="例：売上が伸び悩んでいる、新規営業に手が回らない、AIを活用したいが何から始めればいいかわからない、など"></textarea></div>
-          <div class="cf-submit-row"><button type="submit" class="cf-submit">無料相談を申し込む →</button></div>
-        </form>
-      </div>
+        <div class="cf-g"><label>お問い合わせ内容</label><textarea placeholder="ご質問・ご要望をご記入ください"></textarea></div>
+        <button type="submit" class="cf-submit">送信する</button>
+      </form>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div>
-      <a href="#home" class="footer-logo">NEX<span>Y</span></a>
-      <p class="footer-tagline">AIとビジネスの加速を、すべての企業に。<br>スタートアップから飲食店まで、次のステージへ。</p>
+      <a href="#home" class="footer-logo">NEXY<span>.</span></a>
+      <a href="#" class="footer-sns">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Official X
+      </a>
     </div>
-    <div class="footer-nav">
-      <div class="footer-col">
-        <h4>Business</h4>
-        <ul>
-          <li><a href="#services">AIコンサルティング</a></li>
-          <li><a href="#services">飲食コンサルティング</a></li>
-          <li><a href="#services">営業代行</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
+    <div class="footer-nav-wrap">
+      <div class="fcol">
         <h4>Company</h4>
-        <ul>
-          <li><a href="#why">Why NEXY</a></li>
-          <li><a href="#flow">ご支援の流れ</a></li>
-          <li><a href="#contact">お問い合わせ</a></li>
-        </ul>
+        <ul><li><a href="#business">Business</a></li><li><a href="#news">News</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div class="fcol">
+        <h4>Service</h4>
+        <ul><li><a href="#business">AIコンサルティング</a></li><li><a href="#business">飲食店コンサルティング</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-right">
+      <h4>Contact</h4>
+      <div class="footer-links-col">
+        <a href="mailto:info@nexy.work" class="footer-ext"><div class="footer-ext-t">info@nexy.work</div><div class="footer-ext-d">メールでのお問い合わせ</div></a>
+        <a href="#contact" class="footer-ext"><div class="footer-ext-t">無料相談フォーム</div><div class="footer-ext-d">30分のオンライン相談</div></a>
       </div>
     </div>
   </footer>
   <div class="footer-bottom">
-    <span>© 2026 NEXY. All rights reserved.</span>
-    <span>info@nexy.work</span>
+    <p>© 2026 NEXY. All rights reserved.</p>
+    <div class="footer-btm-links"><a href="#">プライバシーポリシー</a><a href="#">お問い合わせ</a></div>
   </div>
 
   <script>
-    function switchTab(id, btn) {
-      document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.service-panels > div').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-' + id).classList.add('active');
-    }
+    // AI Chart - 折れ線グラフ
+    const aiCtx = document.getElementById('aiChart').getContext('2d');
+    new Chart(aiCtx, {
+      type: 'line',
+      data: {
+        labels: ['10月', '11月', '12月', '1月', '2月', '3月'],
+        datasets: [{
+          label: '成長指数',
+          data: [42, 55, 61, 70, 81, 94],
+          borderColor: '#1240c4',
+          backgroundColor: 'rgba(18,64,196,0.07)',
+          borderWidth: 2,
+          pointBackgroundColor: '#1240c4',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter' }, color: '#999' } },
+          y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 10, family: 'Inter' }, color: '#999' }, min: 0, max: 100 }
+        },
+        animation: { duration: 1500, easing: 'easeInOutQuart' }
+      }
+    });
+
+    // Food Chart - 棒グラフ
+    const foodCtx = document.getElementById('foodChart').getContext('2d');
+    new Chart(foodCtx, {
+      type: 'bar',
+      data: {
+        labels: ['10月', '11月', '12月', '1月', '2月', '3月'],
+        datasets: [
+          {
+            label: '今年',
+            data: [182, 198, 241, 215, 228, 267],
+            backgroundColor: 'rgba(212,68,10,0.85)',
+            borderRadius: 4,
+            borderSkipped: false,
+          },
+          {
+            label: '前年',
+            data: [155, 162, 190, 178, 183, 210],
+            backgroundColor: 'rgba(212,68,10,0.15)',
+            borderRadius: 4,
+            borderSkipped: false,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: { font: { size: 10, family: 'Inter' }, color: '#999', boxWidth: 10, padding: 12 }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter' }, color: '#999' } },
+          y: { grid: { color: '#f5f5f5' }, ticks: { font: { size: 10, family: 'Inter' }, color: '#999' } }
+        },
+        animation: { duration: 1500, easing: 'easeInOutQuart' }
+      }
+    });
+
+    // Animate progress bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.dash-item-bar').forEach(bar => {
+            bar.style.width = bar.dataset.width;
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.ai-dashboard').forEach(el => observer.observe(el));
   </script>
+
 </body>
 </html>
